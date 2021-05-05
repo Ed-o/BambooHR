@@ -28,7 +28,7 @@ $url = "https://api.bamboohr.com/api/gateway.php/" . $companydomain . "/v1/emplo
 // And call it to get the data back
 
 $content = file_get_contents($url, false, $stream);
-if (empty($contents))
+if (empty($content))
 {
 	echo "Error reading data from site";
 } else {
