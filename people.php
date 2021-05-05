@@ -28,30 +28,34 @@ $url = "https://api.bamboohr.com/api/gateway.php/" . $companydomain . "/v1/emplo
 // And call it to get the data back
 
 $content = file_get_contents($url, false, $stream);
-$xml = simplexml_load_string($content);
+if (empty($contents))
+{
+	echo "Error reading data from site";
+} else {
+	$xml = simplexml_load_string($content);
 
-// The page content is a stream. We need this as an array
-$array = (array)$xml;
+	// The page content is a stream. We need this as an array
+	$array = (array)$xml;
 
-// Then lets extract the data into arrays we can go through
-$employees = (array)$array['employees'];
-$employee = $employees['employee'];
+	// Then lets extract the data into arrays we can go through
+	$employees = (array)$array['employees'];
+	$employee = $employees['employee'];
 
-// For this simple example we will look for IDs that are lower and higher.
-$lower = 0;
-$higher = 0;
-$count = 0;
+	// For this simple example we will look for IDs that are lower and higher.
+	$lower = 0;
+	$higher = 0;
+	$count = 0;
 
-// Now loop through all the employees and count them
-foreach ($employee as $theperson) {
-	$person = (array)$theperson ;
-	$id = $person['@attributes']['id']; // this is the ID number of the person
-	$count = $count + 1; // count ever person we find
-	if ( $id < $findme) { $lower = $lower + 1; } // count the ones that have lower IDs
-	if ( $id > $findme) { $higher = $higher + 1; } // and count the higher ones too
+	// Now loop through all the employees and count them
+	foreach ($employee as $theperson) {
+		$person = (array)$theperson ;
+		$id = $person['@attributes']['id']; // this is the ID number of the person
+		$count = $count + 1; // count ever person we find
+		if ( $id < $findme) { $lower = $lower + 1; } // count the ones that have lower IDs
+		if ( $id > $findme) { $higher = $higher + 1; } // and count the higher ones too
+	}
+
+	echo "I found $count people and of these, $lower were lower and $higher were higher";
+	echo " " ;
 }
-
-echo "I found $count people and of these, $lower were lower and $higher were higher";
-echo " " ;
-
 ?>
